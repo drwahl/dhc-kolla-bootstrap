@@ -210,7 +210,7 @@
 
     - name: Link the kolla's configuration files in /etc
       file:
-        src: /usr/local/share/kolla/etc_examples/kolla
+        src: /usr/local/share/kolla-ansible/etc_examples/kolla
         dest: /etc/kolla
         state: link
 
