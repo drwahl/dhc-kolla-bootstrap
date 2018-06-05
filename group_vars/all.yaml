@@ -23,6 +23,6 @@ external_network: kolla-neutron-external-network
 external_network_cidr: 172.17.200.0/24
 
 # Kolla branch
-kolla_version: stable/newton
+kolla_version: stable/queens
 # VIP used by HAProxy, this has to be a unused ip on the internal_network
 internal_vip_address: "172.17.100.254"

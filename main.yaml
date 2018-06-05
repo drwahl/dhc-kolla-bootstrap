@@ -203,6 +203,11 @@
         name: git+https://github.com/openstack/kolla.git@{{kolla_version}}
         editable: False
 
+    - name: Install kolla-ansible from github
+      pip:
+        name: git+https://github.com/openstack/kolla-ansible.git@{{kolla_version}}
+        editable: False
+
     - name: Link the kolla's configuration files in /etc
       file:
         src: /usr/local/share/kolla/etc_examples/kolla
@@ -211,7 +216,7 @@
 
     - name: Link the kolla's inventory example file in /root
       file:
-        src: /usr/local/share/kolla/ansible/inventory/multinode
+        src: /usr/local/share/kolla-ansible/ansible/inventory/multinode
         dest: /root/multinode
         state: link
 
