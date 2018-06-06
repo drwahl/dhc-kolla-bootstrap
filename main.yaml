@@ -41,7 +41,7 @@
       fixed_ips:
         - ip_address: "{{internal_vip_address}}"
 
-  - name: Make VIP ip accessible on all the controller node
+  - name: Make VIP ip accessible on all the controller nodes
     os_port:
       state: present
       key: "{{key}}"
@@ -50,6 +50,16 @@
       allowed_address_pairs:
         - ip_address: "{{internal_vip_address}}"
     with_sequence: count="{{controllers}}" format="{{controller_name_format}}"
+
+  - name: Make VIP ip accessible on all the compute nodes
+    os_port:
+      state: present
+      key: "{{key}}"
+      network: "{{internal_network}}"
+      name: "{{item}}"
+      allowed_address_pairs:
+        - ip_address: "{{internal_vip_address}}"
+    with_sequence: count="{{compute_nodes}}" format="{{compute_node_name_format}}"
 
   - name: Boot the operator node
     os_server:
@@ -62,6 +72,10 @@
       network: "{{internal_network}}"
       meta: groups=operator
       wait: yes
+      userdata: |
+        #cloud-config
+        packages:
+          - python-minimal
     register: kolla_operator
     async: 7200
     poll: 0
@@ -78,6 +92,10 @@
       nics:
         - port-name: "{{item}}"
       wait: yes
+      userdata: |
+        #cloud-config
+        packages:
+          - python-minimal
     with_sequence: count="{{controllers}}" format="{{controller_name_format}}"
     register: kolla_controllers
     async: 7200
@@ -97,6 +115,10 @@
         - net-name: "{{external_network}}"
       wait: yes
       auto_ip: no
+      userdata: |
+        #cloud-config
+        packages:
+          - python-minimal
     register: kolla_compute_nodes
     with_sequence: count="{{compute_nodes}}" format="{{compute_node_name_format}}"
     async: 7200
